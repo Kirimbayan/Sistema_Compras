@@ -17,12 +17,10 @@ namespace Sistema_Compras
     {
         [Key]
         public int IdProv { get; set; }
-        [Required]
         public string Nombre { get; set; }
         [Required]
         public string Cedula_o_RNC { get; set; }
         [Required]
-        [MaxLength(40, ErrorMessage = "El nombre comercial debe tener un maximo de 40 posiciones")]
         public string Nombre_Comercial { get; set; }
         public bool Activo { get; set; }
     }

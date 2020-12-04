@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -167,6 +168,35 @@ namespace Sistema_Compras.Controllers
                 return false;
         }
 
+
+        //Para imprimir en Excel Inicio
+        public ActionResult exportaExcel()
+        {
+            string filename = "Proveedores.csv";
+            string filepath = @"c:\tmp\" + filename;
+            StreamWriter sw = new StreamWriter(filepath);
+            sw.WriteLine("sep=,");
+            sw.WriteLine("Nombre,Cedula_o_RNC,Nombre_Comercial,Activo"); //Encabezado 
+            foreach (var i in db.Proveedores.ToList())
+            {
+                sw.WriteLine(i.Nombre + "," + i.Cedula_o_RNC + "," + i.Nombre_Comercial + "," + i.Activo);
+            }
+            sw.Close();
+
+            byte[] filedata = System.IO.File.ReadAllBytes(filepath);
+            string contentType = MimeMapping.GetMimeMapping(filepath);
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = filename,
+                Inline = false,
+            };
+
+            Response.AppendHeader("Content-Disposition", cd.ToString());
+
+            return File(filedata, contentType);
+        }
+        //Para imprimir en Excel Fin
 
     }
 }

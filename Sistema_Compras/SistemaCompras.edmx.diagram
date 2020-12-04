@@ -5,15 +5,15 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="caa4a618c04c4ee2b60b165188a57377" Name="Diagram1">
-        <EntityTypeShape EntityType="ComprasModel.Articulos" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ComprasModel.Departamentos" Width="1.5" PointX="3.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ComprasModel.Empleados" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ComprasModel.Marcas" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="ComprasModel.Medidas" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ComprasModel.Orden_Compra" Width="1.5" PointX="5.25" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ComprasModel.Proveedores" Width="1.5" PointX="0.75" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="ComprasModel.Solicitud_Articulos" Width="1.5" PointX="8.25" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ComprasModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="ComprasModel.Articulos" Width="1.5" PointX="4.5" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ComprasModel.Departamentos" Width="1.5" PointX="3.625" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ComprasModel.Empleados" Width="1.5" PointX="6.875" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ComprasModel.Marcas" Width="1.5" PointX="1" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ComprasModel.Medidas" Width="1.5" PointX="1.5" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ComprasModel.Orden_Compra" Width="1.5" PointX="7.375" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ComprasModel.Proveedores" Width="1.5" PointX="1.125" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ComprasModel.Solicitud_Articulos" Width="2.375" PointX="9.75" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ComprasModel.sysdiagrams" Width="1.5" PointX="2.875" PointY="6.5" IsExpanded="true" />
         <AssociationConnector Association="ComprasModel.FK_Articulos_Marcas" ManuallyRouted="false" />
         <AssociationConnector Association="ComprasModel.FK_Articulos_Medidas" ManuallyRouted="false" />
         <AssociationConnector Association="ComprasModel.FK_Orden_Compra_Articulos" ManuallyRouted="false" />

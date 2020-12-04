@@ -20,14 +20,20 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: 100%;
     /* Si ves esto es porque funcina el GITHUB. BYE */
 }
 
-.banner {
-    margin-top: -25px;
-    width: auto;
-    height: 500px;
-    background-size: cover;
-    background-image: url(https://images.pexels.com/photos/4483774/pexels-photo-4483774.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
+
+
+.contenedor {
+    width: 90%;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+
+.spacing{
+    margin-bottom: 10px;
+    margin-top: 5px;
 }

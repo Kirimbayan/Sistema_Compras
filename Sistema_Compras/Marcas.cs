@@ -21,6 +21,7 @@ namespace Sistema_Compras
             this.Articulos = new HashSet<Articulos>();
             this.Orden_Compra = new HashSet<Orden_Compra>();
         }
+        
         [Key]
         public int IdMarca { get; set; }
         [Required]

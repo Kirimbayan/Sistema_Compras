@@ -11,7 +11,8 @@ namespace Sistema_Compras
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Medidas
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,8 +22,10 @@ namespace Sistema_Compras
             this.Orden_Compra = new HashSet<Orden_Compra>();
             this.Solicitud_Articulos = new HashSet<Solicitud_Articulos>();
         }
-    
+
+        [Key]
         public int IdMedida { get; set; }
+        [Required]
         public string Unidad_de_Medida { get; set; }
         public bool Activo { get; set; }
     

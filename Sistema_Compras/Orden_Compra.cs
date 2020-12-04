@@ -15,13 +15,18 @@ namespace Sistema_Compras
 
     public partial class Orden_Compra
     {
+        [Key]
         public int IdOrden { get; set; }
+        [Required]
+        [Range(1, Int32.MaxValue)]
         public int No_Orden { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public System.DateTime Fecha_Orden { get; set; }
+        public DateTime Fecha_Orden { get; set; }
         public bool Activo { get; set; }
+        [Required]
         public int Articulo { get; set; }
+        [Required]
+        [Range(1, Int32.MaxValue)]
         public int Cantidad { get; set; }
         public int Unidad_Medida { get; set; }
         public int Marca { get; set; }

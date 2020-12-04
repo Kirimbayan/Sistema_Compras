@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -15,13 +16,22 @@ namespace Sistema_Compras.Controllers
         private ComprasEntities db = new ComprasEntities();
 
         // GET: Solicitud_Articulos
-        public ActionResult Index()
+        [Authorize(Roles = "Administrador, Empleado, Consulta")]
+        public ActionResult Index(string Criterio = null)
         {
-            var solicitud_Articulos = db.Solicitud_Articulos.Include(s => s.Articulos).Include(s => s.Empleados).Include(s => s.Medidas);
-            return View(solicitud_Articulos.ToList());
+            var solicitud_Articulos = db.Solicitud_Articulos.Include(a => a.Empleado).Include(a => a.Articulo);
+            return View(db.Solicitud_Articulos.Where(p => Criterio == null ||
+            p.Empleado.ToString().StartsWith(Criterio) ||
+            p.Fecha_Solicitud.ToString().StartsWith(Criterio) ||
+            p.Articulo.ToString().StartsWith(Criterio) ||
+            p.Cantidad.ToString().StartsWith(Criterio) ||
+            p.Unidad_Medida.ToString().StartsWith(Criterio) ||
+            p.Activo.ToString().StartsWith(Criterio)).ToList());
         }
 
+
         // GET: Solicitud_Articulos/Details/5
+        [Authorize(Roles = "Administrador, Empleado, Consulta")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +47,7 @@ namespace Sistema_Compras.Controllers
         }
 
         // GET: Solicitud_Articulos/Create
+        [Authorize(Roles = "Administrador, Empleado")]
         public ActionResult Create()
         {
             ViewBag.Articulo = new SelectList(db.Articulos, "IdArt", "Articulo");
@@ -52,9 +63,10 @@ namespace Sistema_Compras.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdSol,Empleado,Fecha_Solicitud,Articulo,Cantidad,Unidad_Medida,Activo")] Solicitud_Articulos solicitud_Articulos)
         {
+
             if (ModelState.IsValid)
             {
-                db.Solicitud_Articulos.Add(solicitud_Articulos);
+               
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -66,6 +78,7 @@ namespace Sistema_Compras.Controllers
         }
 
         // GET: Solicitud_Articulos/Edit/5
+        [Authorize(Roles = "Administrador, Empleado")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -103,6 +116,7 @@ namespace Sistema_Compras.Controllers
         }
 
         // GET: Solicitud_Articulos/Delete/5
+        [Authorize(Roles = "Administrador, Empleado")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -125,6 +139,13 @@ namespace Sistema_Compras.Controllers
             Solicitud_Articulos solicitud_Articulos = db.Solicitud_Articulos.Find(id);
             db.Solicitud_Articulos.Remove(solicitud_Articulos);
             db.SaveChanges();
+
+            Articulos articulos = (from r in db.Articulos.Where
+                                           (a => a.Unidad_Medida == solicitud_Articulos.Unidad_Medida)
+                                   select r).FirstOrDefault();
+            articulos.Existencia = articulos.Existencia + solicitud_Articulos.Cantidad;
+            db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
@@ -136,5 +157,35 @@ namespace Sistema_Compras.Controllers
             }
             base.Dispose(disposing);
         }
+
+        //Para imprimir en Excel Inicio
+        public ActionResult exportaExcel()
+        {
+            string filename = "Solicitud_Articulos.csv";
+            string filepath = @"c:\tmp\" + filename;
+            StreamWriter sw = new StreamWriter(filepath);
+            sw.WriteLine("sep=,");
+            sw.WriteLine("Empleado,Fecha_Solicitud,Articulo,Cantidad,Unidad_Medida,Activo"); //Encabezado 
+            foreach (var i in db.Solicitud_Articulos.ToList())
+            {
+                sw.WriteLine(i.Empleado + "," + i.Fecha_Solicitud + "," + i.Articulo + "," + i.Cantidad + "," + i.Unidad_Medida + "," + i.Activo);
+            }
+            sw.Close();
+
+            byte[] filedata = System.IO.File.ReadAllBytes(filepath);
+            string contentType = MimeMapping.GetMimeMapping(filepath);
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = filename,
+                Inline = false,
+            };
+
+            Response.AppendHeader("Content-Disposition", cd.ToString());
+
+            return File(filedata, contentType);
+        }
+        //Para imprimir en Excel Fin
+
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -19,7 +20,7 @@ namespace Sistema_Compras.Controllers
         [Authorize(Roles = "Administrador, Empleado, Consulta")]
         public ActionResult Index(string Criterio = null)
         {
-            var articulos = db.Articulos.Include(a => a.Marcas).Include(a => a.Medidas);
+            var articulos = db.Articulos.Include(a => a.Marca).Include(a => a.Unidad_Medida);
             return View(db.Articulos.Where(p => Criterio == null ||
             p.Articulo.StartsWith(Criterio) ||
             p.Marca.ToString().StartsWith(Criterio) ||
@@ -143,5 +144,37 @@ namespace Sistema_Compras.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+        //Para imprimir en Excel Inicio
+        public ActionResult exportaExcel()
+        {
+            string filename = "Articulos.csv";
+            string filepath = @"c:\tmp\" + filename;
+            StreamWriter sw = new StreamWriter(filepath);
+            sw.WriteLine("sep=,");
+            sw.WriteLine("Articulo,Marca,Unidad_Medida,Existencia,Activo"); //Encabezado 
+            foreach (var i in db.Articulos.ToList())
+            {
+                sw.WriteLine(i.Articulo + "," + i.Marca + "," + i.Unidad_Medida + "," + i.Existencia + "," + i.Activo);
+            }
+            sw.Close();
+
+            byte[] filedata = System.IO.File.ReadAllBytes(filepath);
+            string contentType = MimeMapping.GetMimeMapping(filepath);
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = filename,
+                Inline = false,
+            };
+
+            Response.AppendHeader("Content-Disposition", cd.ToString());
+
+            return File(filedata, contentType);
+        }
+        //Para imprimir en Excel Fin
+
+
     }
 }

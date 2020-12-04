@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -19,7 +20,7 @@ namespace Sistema_Compras.Controllers
         [Authorize(Roles = "Administrador, Empleado")]
         public ActionResult Index(string Criterio = null)
         {
-            var empleados = db.Empleados.Include(e => e.Departamentos);
+            //var empleados = db.Empleados.Include(a => a.Nombre).Include(a => a.Departamento);
             return View(db.Empleados.Where(p => Criterio == null || 
             p.Nombre.StartsWith(Criterio) ||
             p.Cedula.StartsWith(Criterio) ||
@@ -166,6 +167,36 @@ namespace Sistema_Compras.Controllers
             else
                 return false;
         }
+
+        //Para imprimir en Excel Inicio
+        public ActionResult exportaExcel()
+        {
+            string filename = "Empleados.csv";
+            string filepath = @"c:\tmp\" + filename;
+            StreamWriter sw = new StreamWriter(filepath);
+            sw.WriteLine("sep=,");
+            sw.WriteLine("Cedula,Nombre,Departamento,Activo"); //Encabezado 
+            foreach (var i in db.Empleados.ToList())
+            {
+                sw.WriteLine(i.Cedula + "," + i.Nombre + "," + i.Departamento + "," + i.Activo);
+            }
+            sw.Close();
+
+            byte[] filedata = System.IO.File.ReadAllBytes(filepath);
+            string contentType = MimeMapping.GetMimeMapping(filepath);
+
+            var cd = new System.Net.Mime.ContentDisposition
+            {
+                FileName = filename,
+                Inline = false,
+            };
+
+            Response.AppendHeader("Content-Disposition", cd.ToString());
+
+            return File(filedata, contentType);
+        }
+        //Para imprimir en Excel Fin
+
 
     }
 }

@@ -26,7 +26,6 @@ namespace Sistema_Compras
         [Required]
         public string Cedula { get; set; }
         [Required]
-        [MaxLength(40, ErrorMessage = "El nombre debe tener un maximo de 40 posiciones")]
         public string Nombre { get; set; }
         [Required]
         public int Departamento { get; set; }

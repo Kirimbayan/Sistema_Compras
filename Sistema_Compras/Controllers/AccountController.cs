@@ -12,6 +12,7 @@ using Sistema_Compras.Models;
 
 namespace Sistema_Compras.Controllers
 {
+   
     [Authorize]
     public class AccountController : Controller
     {

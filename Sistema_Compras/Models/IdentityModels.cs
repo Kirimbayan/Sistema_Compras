@@ -29,5 +29,6 @@ namespace Sistema_Compras.Models
         {
             return new ApplicationDbContext();
         }
+
     }
 }

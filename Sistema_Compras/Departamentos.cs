@@ -11,7 +11,8 @@ namespace Sistema_Compras
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Departamentos
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,8 +20,10 @@ namespace Sistema_Compras
         {
             this.Empleados = new HashSet<Empleados>();
         }
-    
+
+        [Key]
         public int IdDep { get; set; }
+        [Required]
         public string Nombre { get; set; }
         public bool Activo { get; set; }
     
